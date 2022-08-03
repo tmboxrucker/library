@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="body">
+    <div class="header">
+        <div class="header-container">
+            <div class="title">
+                <img src="images/board-game-removebg-preview.png" alt="icon" id="icon">
+                <h1>Library</h1>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="modify">
+            <div class="addGame" id="addGame">
+                <img src="images/plus.png" alt="add game">Add Game
+            </div>
+            <div class="sort">
+                <select name="sort" id="sort">
+                    <option value="abcRating" selected = "selected">Highest Rated</option>
+                    <option value="abcCount">Player Count (low-high)</option>
+                    <option value="cbaCount">Player Count (high-low)</option>
+                    <option value="abcMaturity">Recommended Age (low-high)</option>
+                    <option value="abcTitle">Title (A-Z)</option>
+                    <option value="cbaTitle">Title (Z-A)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        Page made by Troy Boxrucker 2022
+    </div>
+    <div class="modal" id="modal">
+        <form class="addGameModalForm" id="testForm">
+            <h2>Add a new Game</h2>
+            <input class="modalInput" type="text" name="title" id="title" placeholder="Game title" required maxlength="100">
+            <input class="modalInput" type="number" name="min-player" id="min-player" placeholder="Minimum number of players" required maxlength="100">
+            <input class="modalInput" type="number" name="max-player" id="max-player" placeholder="Maximum number of players" required maxlength="100">
+            <input class="modalInput" type="number" name="age" id="age" placeholder="Minimum age to play" required maxlength="100">
+            <input class="modalInput" type="number" name="play-time" id="play-time" placeholder="Average playtime duration (in min)" required maxlength="100">
+            <div class="modal-played">
+                <p>Already played:</p>
+                <input class="modalCheckbox" type="checkbox" name="played" id="played" required onchange="activateRatings(this)">
+            </div>
+            <div class="rating" id="rating">
+                <input type="radio" id="star5" name="rate" value="5" />
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="rate" value="4" />
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="rate" value="3" />
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="rate" value="2" />
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="rate" value="1" />
+                <label for="star1" title="text">1 star</label>
+                <p>Rating</p>
+            </div>
+            <button class="modalInput" type="submit">Submit</button>
+        </form>
+    </div>
+    <div class="overlay" id="overlay"></div>
+</body>
+<script src="index.js"></script>
+</html>
