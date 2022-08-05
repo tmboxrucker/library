@@ -1,13 +1,43 @@
+// Declare empty library array
 let myLibrary = [];
+let newRating = '';
+
+// Object constructor
+function book(title, author, pages, read) {
+    var yesOrNo;
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+    if (read == 'no') {
+        yesOrNo = 'not read yet';
+    }
+    else if (read == 'yes') {
+        yesOrNo = 'has already been read';
+    }
+    else {
+        yesOrNo = 'invalid input';
+    }
+    this.info = function() {
+        return(title + ' by ' + author + ', ' + pages + ', ' + yesOrNo)
+    }
+}
 
 function BoardGame(gameTitle, gamePlayerCountMin, gamePlayerCountMax, gameAge, gamePlayTime, gamePlayed, gameRating) {
+    var yesOrNo;
     this.title = gameTitle;
     this.playerCountMin = gamePlayerCountMin;
     this.playerCountMax = gamePlayerCountMax
     this.age = gameAge;
     this.playTime = gamePlayTime;
     this.played = gamePlayed;
-    this.rating = gameRating;
+    if (gamePlayed == true)  {
+        this.rating = newRating;
+    }
+
+    if (this.played == 'checked') {
+        activateRatings()
+    }
 }
 
 const addGame = document.getElementById('addGame');
@@ -16,6 +46,188 @@ const modal = document.getElementById('modal');
 const overlay = document.getElementById('overlay');
 const rating = document.getElementById('rating');
 const played = document.getElementById('played');
+const gameList = document.getElementById('gameList');
+const organization = document.getElementById('sort');  // Just grabbed sort elements, start working on organizing cards
+
+addGameToLibrary = (gameTitle, gamePlayerCountMin, gamePlayerCountMax, gameAge, gamePlayTime, gamePlayed, gameRating) => {
+    let boardGame = new BoardGame(gameTitle, gamePlayerCountMin, gamePlayerCountMax, gameAge, gamePlayTime, gamePlayed, gameRating);
+    myLibrary.push(boardGame);
+    displayGameOnPage();
+}
+
+displayGameOnPage = () => {
+    const removeDivs = document.querySelectorAll('.card');
+    for (let i = 0; i < removeDivs.length; i++) {
+        removeDivs[i].remove();
+    }
+
+    myLibrary.forEach(myLibrary => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        gameList.appendChild(card);
+        let playerHold = '';
+        let ratingHold = '';
+
+        const cardModifiers = document.createElement('div');
+        cardModifiers.classList.add('cardModifiers');
+        const images1 = document.createElement('img');
+        const images2 = document.createElement('img');
+        images1.setAttribute('src','images/trash.png');
+        images2.setAttribute('src','images/edit.png');
+        images1.setAttribute('alt','delete');
+        images2.setAttribute('alt','edit');
+        images1.setAttribute('id','delete');
+        images2.setAttribute('id','edit');
+        images1.classList.add('icon');
+        images2.classList.add('icon');
+        cardModifiers.appendChild(images1);
+        cardModifiers.appendChild(images2);
+        card.appendChild(cardModifiers);
+
+        for (let key in myLibrary) {
+            if (key == 'title') {
+                const para = document.createElement('p');
+                para.textContent = (`Title: ${myLibrary[key]}`);
+                card.appendChild(para);
+            }
+            else if (key == 'playerCountMin') {
+                playerHold = key;
+            }
+            else if (key == 'playerCountMax') {
+                const para = document.createElement('p');
+                para.textContent = (`Player count: ${myLibrary[playerHold]} - ${myLibrary[key]}`);
+                card.appendChild(para);
+            }
+            else if (key == 'age') {                
+                const para = document.createElement('p');
+                para.textContent = (`Age: ${myLibrary[key]}+`);
+                card.appendChild(para);
+            }
+            else if (key == 'playTime') {
+                const para = document.createElement('p');
+                para.textContent = (`Length: ${myLibrary[key]} min`);
+                card.appendChild(para);
+            }
+            else if (key == 'played') {
+                ratingHold = myLibrary[key];
+            }
+            else {
+                if (ratingHold == true) {;
+                    const ratingApplied = document.createElement('div');
+                    const ratingPara = document.createElement('p');
+                    ratingPara.textContent = (`Rating`);
+
+                    const ratingInput1 = document.createElement('input');
+                    const ratingInput2 = document.createElement('input');
+                    const ratingInput3 = document.createElement('input');
+                    const ratingInput4 = document.createElement('input');
+                    const ratingInput5 = document.createElement('input');
+                    ratingInput1.setAttribute('type','checkbox');
+                    ratingInput2.setAttribute('type','checkbox');
+                    ratingInput3.setAttribute('type','checkbox');
+                    ratingInput4.setAttribute('type','checkbox');
+                    ratingInput5.setAttribute('type','checkbox');
+                    ratingInput1.setAttribute('id','starApplied5');
+                    ratingInput2.setAttribute('id','starApplied4');
+                    ratingInput3.setAttribute('id','starApplied3');
+                    ratingInput4.setAttribute('id','starApplied2');
+                    ratingInput5.setAttribute('id','starApplied1');
+                    ratingInput1.setAttribute('name','rate');
+                    ratingInput2.setAttribute('name','rate');
+                    ratingInput3.setAttribute('name','rate');
+                    ratingInput4.setAttribute('name','rate');
+                    ratingInput5.setAttribute('name','rate');
+                    ratingInput1.setAttribute('value','5');
+                    ratingInput2.setAttribute('value','4');
+                    ratingInput3.setAttribute('value','3');
+                    ratingInput4.setAttribute('value','2');
+                    ratingInput5.setAttribute('value','1');
+                    ratingInput1.setAttribute('disabled','disabled');
+                    ratingInput2.setAttribute('disabled','disabled');
+                    ratingInput3.setAttribute('disabled','disabled');
+                    ratingInput4.setAttribute('disabled','disabled');
+                    ratingInput5.setAttribute('disabled','disabled');
+
+                    if (myLibrary[key] == 5) {
+                        ratingInput1.setAttribute('checked','true');
+                        ratingInput2.setAttribute('checked','true');
+                        ratingInput3.setAttribute('checked','true');
+                        ratingInput4.setAttribute('checked','true');
+                        ratingInput5.setAttribute('checked','true');
+                    }
+                    else if (myLibrary[key] == 4) {
+                        ratingInput2.setAttribute('checked','true');
+                        ratingInput3.setAttribute('checked','true');
+                        ratingInput4.setAttribute('checked','true');
+                        ratingInput5.setAttribute('checked','true');
+                    }
+                    else if (myLibrary[key] == 3) {
+                        ratingInput3.setAttribute('checked','true');
+                        ratingInput4.setAttribute('checked','true');
+                        ratingInput5.setAttribute('checked','true');
+                    }
+                    else if (myLibrary[key] == 2) {
+                        ratingInput4.setAttribute('checked','true');
+                        ratingInput5.setAttribute('checked','true');
+                    }
+                    else if (myLibrary[key] == 1) {
+                        ratingInput5.setAttribute('checked','true');
+                    }
+
+                    const ratingLabel1 = document.createElement('label');
+                    const ratingLabel2 = document.createElement('label');
+                    const ratingLabel3 = document.createElement('label');
+                    const ratingLabel4 = document.createElement('label');
+                    const ratingLabel5 = document.createElement('label');
+                    ratingLabel1.setAttribute('for','starApplied5');
+                    ratingLabel2.setAttribute('for','starApplied4');
+                    ratingLabel3.setAttribute('for','starApplied3');
+                    ratingLabel4.setAttribute('for','starApplied2');
+                    ratingLabel5.setAttribute('for','starApplied1');
+                    ratingLabel1.setAttribute('title','text');
+                    ratingLabel2.setAttribute('title','text');
+                    ratingLabel3.setAttribute('title','text');
+                    ratingLabel4.setAttribute('title','text');
+                    ratingLabel5.setAttribute('title','text');
+                    ratingLabel1.textContent = (`5 stars`);
+                    ratingLabel2.textContent = (`4 stars`);
+                    ratingLabel3.textContent = (`3 stars`);
+                    ratingLabel4.textContent = (`2 stars`);
+                    ratingLabel5.textContent = (`1 stars`);
+
+                    ratingApplied.classList.add('ratingApplied');
+                    ratingApplied.setAttribute('id', 'ratingApplied');
+                    ratingApplied.appendChild(ratingInput1);
+                    ratingApplied.appendChild(ratingLabel1);
+                    ratingApplied.appendChild(ratingInput2);
+                    ratingApplied.appendChild(ratingLabel2);
+                    ratingApplied.appendChild(ratingInput3);
+                    ratingApplied.appendChild(ratingLabel3);
+                    ratingApplied.appendChild(ratingInput4);
+                    ratingApplied.appendChild(ratingLabel4);
+                    ratingApplied.appendChild(ratingInput5);
+                    ratingApplied.appendChild(ratingLabel5);
+                    ratingApplied.appendChild(ratingPara);
+
+                    card.appendChild(ratingApplied)
+                }
+            }
+            console.log(`${key}: ${myLibrary[key]}`);
+        }
+    })
+}
+
+organizeGrid = () => {
+
+}
+
+
+
+
+
+ratingClick = (e) => {
+    newRating = e;
+}
 
 activateRatings = () => {
     if (played.checked == true) {
@@ -38,12 +250,29 @@ closeModal = () => {
     overlay.classList.remove('active');
 }
 
-function addGameToLibrary(game) {
-    myLibrary.push(game)
+takeFormData = () => {
+    let Title = document.getElementById('title').value;
+    let MinPlayer = document.getElementById('min-player').value;
+    let MaxPlayer = document.getElementById('max-player').value;
+    let Age = document.getElementById('age').value;
+    let PlayTime = document.getElementById('play-time').value;
+    let Played = document.getElementById('played').checked;
+    let Rating = document.getElementById('rating');
+
+    if ((Title == '') || (MinPlayer == '') || (MaxPlayer == '') || (Age == '') || (PlayTime == '')) {
+        return;
+    }
+
+    addGameToLibrary(Title, MinPlayer, MaxPlayer, Age, PlayTime, Played, Rating);
+
+    closeModal();
 }
 
 addGame.onclick = openModal;
 overlay.onclick = closeModal;
 played.onclick = activateRatings;
 
-console.log(modal);
+// addGameToLibrary('Gloomhaven', '1', '4', '12', '60');
+// addGameToLibrary('Wingspan', '1', '5', '10', '60');
+
+// displayGameOnPage();

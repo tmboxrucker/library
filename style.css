@@ -81,6 +81,36 @@ img {
     filter: brightness(90%);
 }
 
+#gameList {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    margin-top: 20px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--secondary-light);
+    border-radius: 15px;
+    box-shadow: 0 0 10px var(--primary-dark);
+    padding: 20px;
+    font-size: large;
+    gap: 5px;
+}
+
+.cardModifiers {
+    display: flex;
+    align-self: flex-end;
+    gap: 10px;
+}
+
+.cardModifiers img {
+    width: 25px;
+    cursor: pointer;
+}
+
 .footer {
     position: absolute;
     bottom: 0;
@@ -147,11 +177,18 @@ img {
     padding-bottom: 10px;
 }
 
-.rating p {
+.ratingApplied {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+    padding-bottom: 10px;
+}
+
+.rating p, .ratingApplied p {
     text-align: center;
 }
 
-.rating:not(:checked) > input {
+.rating:not(:checked) > input, .ratingApplied:not(:checked) > input {
     position:absolute;
     top:-9999px;
 }
@@ -164,10 +201,18 @@ img {
     font-size:30px;
     color:#ccc;
 }
-.rating:not(:checked) > label:before {
+.ratingApplied:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    font-size:30px;
+    color:#ccc;
+}
+.rating:not(:checked) > label:before, .ratingApplied:not(:checked) > label:before {
     content: '★ ';
 }
-.rating > input:checked ~ label {
+.rating > input:checked ~ label, .ratingApplied > input:checked ~ label {
     color: #ffc700;    
 }
 .rating:not(:checked) > label:hover,

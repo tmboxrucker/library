@@ -32,12 +32,15 @@
                 </select>
             </div>
         </div>
+        <div id="gameList">
+
+        </div>
     </div>
     <div class="footer">
         Page made by Troy Boxrucker 2022
     </div>
     <div class="modal" id="modal">
-        <form class="addGameModalForm" id="testForm">
+        <form class="addGameModalForm" id="testForm" onsubmit="return false">
             <h2>Add a new Game</h2>
             <input class="modalInput" type="text" name="title" id="title" placeholder="Game title" required maxlength="100">
             <input class="modalInput" type="number" name="min-player" id="min-player" placeholder="Minimum number of players" required maxlength="100">
@@ -46,22 +49,22 @@
             <input class="modalInput" type="number" name="play-time" id="play-time" placeholder="Average playtime duration (in min)" required maxlength="100">
             <div class="modal-played">
                 <p>Already played:</p>
-                <input class="modalCheckbox" type="checkbox" name="played" id="played" required onchange="activateRatings(this)">
+                <input class="modalCheckbox" type="checkbox" name="played" id="played" onchange="activateRatings(this)">
             </div>
             <div class="rating" id="rating">
-                <input type="radio" id="star5" name="rate" value="5" />
+                <input type="radio" id="star5" name="rate" value="5" onclick="ratingClick('5')" />
                 <label for="star5" title="text">5 stars</label>
-                <input type="radio" id="star4" name="rate" value="4" />
+                <input type="radio" id="star4" name="rate" value="4" onclick="ratingClick('4')" />
                 <label for="star4" title="text">4 stars</label>
-                <input type="radio" id="star3" name="rate" value="3" />
+                <input type="radio" id="star3" name="rate" value="3" onclick="ratingClick('3')" />
                 <label for="star3" title="text">3 stars</label>
-                <input type="radio" id="star2" name="rate" value="2" />
+                <input type="radio" id="star2" name="rate" value="2" onclick="ratingClick('2')" />
                 <label for="star2" title="text">2 stars</label>
-                <input type="radio" id="star1" name="rate" value="1" />
+                <input type="radio" id="star1" name="rate" value="1" onclick="ratingClick('1')" />
                 <label for="star1" title="text">1 star</label>
                 <p>Rating</p>
             </div>
-            <button class="modalInput" type="submit">Submit</button>
+            <button class="modalInput" type="submit" onclick="takeFormData()">Submit</button>
         </form>
     </div>
     <div class="overlay" id="overlay"></div>
