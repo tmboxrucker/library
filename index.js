@@ -361,13 +361,16 @@ activateRatings = (e) => {
 }
 
 openModal = (e) => {
-    if (e.title == undefined || e.title == 'undefined') {
+    if (e.title == undefined) {
+        console.log('not in edit function')
+        newRating = '';
         addGameModalForm.reset();
         activateRatings();
         modal.classList.add('active');
         overlay.classList.add('active');
     }
     else {
+        console.log('in edit function')
         edit = 1;
         editSave = e;
         newRating = editSave['rating'];
