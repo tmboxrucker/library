@@ -34,6 +34,12 @@ function BoardGame(gameTitle, gamePlayerCountMin, gamePlayerCountMax, gameAge, g
     if (gamePlayed == true)  {
         this.rating = newRating;
     }
+    else {
+        this.rating = '';
+    }
+    if (typeof gameRating == 'string') {
+        this.rating = gameRating;
+    }
 
     if (this.played == 'checked') {
         activateRatings()
@@ -47,11 +53,12 @@ const overlay = document.getElementById('overlay');
 const rating = document.getElementById('rating');
 const played = document.getElementById('played');
 const gameList = document.getElementById('gameList');
-const organization = document.getElementById('sort');  // Just grabbed sort elements, start working on organizing cards
+const organization = document.getElementById('sort');
 
 addGameToLibrary = (gameTitle, gamePlayerCountMin, gamePlayerCountMax, gameAge, gamePlayTime, gamePlayed, gameRating) => {
     let boardGame = new BoardGame(gameTitle, gamePlayerCountMin, gamePlayerCountMax, gameAge, gamePlayTime, gamePlayed, gameRating);
     myLibrary.push(boardGame);
+    organizeGrid(organization);
     displayGameOnPage();
 }
 
@@ -212,16 +219,91 @@ displayGameOnPage = () => {
                     card.appendChild(ratingApplied)
                 }
             }
-            console.log(`${key}: ${myLibrary[key]}`);
         }
     })
 }
 
-organizeGrid = () => {
+organizeGrid = (e) => {
+    if (e.value == 'playerCountMin' || e.value == 'playTime' || e.value == 'age' || e.value == 'title1') {
+        var arr = [];
+        let count = 0;
+        if (e.value == 'title1') {
+            count = 1;
+            e.value = 'title';
+        }
+        for (var prop in myLibrary) {
+            if (myLibrary.hasOwnProperty(prop)) {
+                var obj = {};
+                obj[prop] = myLibrary[prop];
+                obj.tempSortName = myLibrary[prop][e.value];
+                arr.push(obj);
+            }
+        }
+        if (count == 1) {
+            count = 0;
+            e.value = 'title1'
+        }
 
+        arr.sort(function(a,b) {
+            var at = a.tempSortName,
+                bt = b.tempSortName;
+            if (e.value == 'title1') {
+                return at > bt ? 1 : (at < bt ? -1 : 0);
+            }
+            return +at > +bt ? 1 : (+at < +bt ? -1 : 0);
+        });
+
+        var result = [];
+        for (var i = 0, l = arr.length; i < l; i++) {
+            var obj = arr[i];
+            delete obj.tempSortName;
+            for (var prop in obj) {
+                if (obj.hasOwnProperty(prop)) {
+                    var id = prop;
+                }
+            }
+            var item = obj[id];
+            result.push(item);
+        }
+        myLibrary = result
+        return displayGameOnPage();  
+    }
+    else {
+        var arr = [];
+        for (var prop in myLibrary) {
+            if (myLibrary.hasOwnProperty(prop)) {
+                var obj = {};
+                obj[prop] = myLibrary[prop];
+                obj.tempSortName = myLibrary[prop][e.value];
+                arr.push(obj);
+            }
+        }
+    
+        arr.sort(function(a,b) {
+            var at = a.tempSortName,
+                bt = b.tempSortName;
+            if (e.value == 'title') {
+                return at < bt ? 1 : (at > bt ? -1 : 0);
+            }
+            return +at < +bt ? 1 : (+at > +bt ? -1 : 0);
+        });
+    
+        var result = [];
+        for (var i = 0, l = arr.length; i < l; i++) {
+            var obj = arr[i];
+            delete obj.tempSortName;
+            for (var prop in obj) {
+                if (obj.hasOwnProperty(prop)) {
+                    var id = prop;
+                }
+            }
+            var item = obj[id];
+            result.push(item);
+        }
+        myLibrary = result
+        return displayGameOnPage();  
+    }  
 }
-
-
 
 
 
@@ -272,7 +354,11 @@ addGame.onclick = openModal;
 overlay.onclick = closeModal;
 played.onclick = activateRatings;
 
-// addGameToLibrary('Gloomhaven', '1', '4', '12', '60');
-// addGameToLibrary('Wingspan', '1', '5', '10', '60');
+addGameToLibrary('Gloomhaven', '1', '4', '12', '120', true, '5');
+addGameToLibrary('Wingspan', '1', '5', '10', '60', true, '4');
+addGameToLibrary('Dead of Winter', '2', '6', '15', '120', true, '4');
+addGameToLibrary('Werewolf Legacy', '8', '20', '16', '45', true, '5');
+addGameToLibrary('Ravensburger', '2', '4', '8', '20', true, '1');
+addGameToLibrary('Harry Potter Deck Builder', '2', '5', '10', '120', true, '4');
 
 // displayGameOnPage();

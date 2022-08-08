@@ -22,13 +22,14 @@
                 <img src="images/plus.png" alt="add game">Add Game
             </div>
             <div class="sort">
-                <select name="sort" id="sort">
-                    <option value="abcRating" selected = "selected">Highest Rated</option>
-                    <option value="abcCount">Player Count (low-high)</option>
-                    <option value="cbaCount">Player Count (high-low)</option>
-                    <option value="abcMaturity">Recommended Age (low-high)</option>
-                    <option value="abcTitle">Title (A-Z)</option>
-                    <option value="cbaTitle">Title (Z-A)</option>
+                <select name="sort" id="sort" onchange="organizeGrid(this)">
+                    <option value="rating">Highest Rated</option>
+                    <option value="playerCountMin">Player Count (low-high)</option>
+                    <option value="playerCountMax">Player Count (high-low)</option>
+                    <option value="playTime">Play time (low-high)</option>
+                    <option value="age">Recommended Age (low-high)</option>
+                    <option value="title1">Title (A-Z)</option>
+                    <option value="title">Title (Z-A)</option>
                 </select>
             </div>
         </div>
