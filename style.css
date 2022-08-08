@@ -43,6 +43,7 @@ img {
     align-items: center;
     max-width: 1500px;
     margin: 0 auto;
+    width: 90%;
 }
 
 .title {
@@ -58,6 +59,7 @@ img {
     flex-direction: column;
     max-width: 1500px;
     margin: 0 auto;
+    width: 90%;
 }
 
 .modify {

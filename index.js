@@ -1,6 +1,8 @@
 // Declare empty library array
 let myLibrary = [];
 let newRating = '';
+let edit = 0;
+let editSave = '';
 
 // Object constructor
 function book(title, author, pages, read) {
@@ -55,6 +57,12 @@ const played = document.getElementById('played');
 const gameList = document.getElementById('gameList');
 const organization = document.getElementById('sort');
 
+const modalRating1 = document.getElementById('star5');
+const modalRating2 = document.getElementById('star4');
+const modalRating3 = document.getElementById('star3');
+const modalRating4 = document.getElementById('star2');
+const modalRating5 = document.getElementById('star1');
+
 addGameToLibrary = (gameTitle, gamePlayerCountMin, gamePlayerCountMax, gameAge, gamePlayTime, gamePlayed, gameRating) => {
     let boardGame = new BoardGame(gameTitle, gamePlayerCountMin, gamePlayerCountMax, gameAge, gamePlayTime, gamePlayed, gameRating);
     myLibrary.push(boardGame);
@@ -85,6 +93,8 @@ displayGameOnPage = () => {
         images2.setAttribute('alt','edit');
         images1.setAttribute('id','delete');
         images2.setAttribute('id','edit');
+        images1.setAttribute('onclick','deleteCurrent(this.parentNode.parentNode.childNodes[1].innerHTML)');
+        images2.setAttribute('onclick','editCurrent(this.parentNode.parentNode.childNodes[1].innerHTML)')
         images1.classList.add('icon');
         images2.classList.add('icon');
         cardModifiers.appendChild(images1);
@@ -154,7 +164,7 @@ displayGameOnPage = () => {
                     ratingInput3.setAttribute('disabled','disabled');
                     ratingInput4.setAttribute('disabled','disabled');
                     ratingInput5.setAttribute('disabled','disabled');
-
+                    
                     if (myLibrary[key] == 5) {
                         ratingInput1.setAttribute('checked','true');
                         ratingInput2.setAttribute('checked','true');
@@ -224,6 +234,33 @@ displayGameOnPage = () => {
 }
 
 organizeGrid = (e) => {
+    let array = [];
+    for (var prop in myLibrary) {
+        if (myLibrary.hasOwnProperty(prop)) {
+            var obj = {};
+            obj[prop] = myLibrary[prop];
+            obj.tempSortName = myLibrary[prop]['title'];
+            array.push(obj);
+        }
+    }
+    array.sort(function(a,b) {
+            var at = a.tempSortName,
+                bt = b.tempSortName;
+                return at > bt ? 1 : (at < bt ? -1 : 0);
+        });
+    var res = [];
+    for (var i = 0, l = array.length; i < l; i++) {
+        var obj = array[i];
+        delete obj.tempSortName;
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+                var id = prop;
+            }
+        }
+        var item = obj[id];
+        res.push(item);
+    }
+    myLibrary = res;
     if (e.value == 'playerCountMin' || e.value == 'playTime' || e.value == 'age' || e.value == 'title1') {
         var arr = [];
         let count = 0;
@@ -311,28 +348,81 @@ ratingClick = (e) => {
     newRating = e;
 }
 
-activateRatings = () => {
+activateRatings = (e) => {
     if (played.checked == true) {
         rating.classList.add('active');
     }
     else {
         rating.classList.remove('active');
     }
+    if (e !== undefined) {
+        
+    }
 }
 
-openModal = () => {
-    addGameModalForm.reset();
-    activateRatings();
-    modal.classList.add('active');
-    overlay.classList.add('active');
+openModal = (e) => {
+    if (e.title == undefined || e.title == 'undefined') {
+        addGameModalForm.reset();
+        activateRatings();
+        modal.classList.add('active');
+        overlay.classList.add('active');
+    }
+    else {
+        edit = 1;
+        editSave = e;
+        newRating = editSave['rating'];
+        addGameModalForm.reset();
+        setFormData(e);
+        activateRatings(e);
+        starEdit(e['rating']);
+        modal.classList.add('active');
+        overlay.classList.add('active');
+
+    }
 }
 
 closeModal = () => {
+    if (edit == 1) {
+        addGameToLibrary(editSave.title, editSave.playerCountMin, editSave.playerCountMax, editSave.age, editSave.playTime, editSave.played, editSave.rating);
+    }
+
+    modalRating1.removeAttribute('checked');
+    modalRating2.removeAttribute('checked');
+    modalRating3.removeAttribute('checked');
+    modalRating4.removeAttribute('checked');
+    modalRating5.removeAttribute('checked');
+
+    edit = 0;
+    editSave = '';
     modal.classList.remove('active');
     overlay.classList.remove('active');
+
+    const Title = document.getElementById('title');
+    const MinPlayer = document.getElementById('min-player');
+    const MaxPlayer = document.getElementById('max-player');
+    const Age = document.getElementById('age');
+    const PlayTime = document.getElementById('play-time');
+    const Played = document.getElementById('played');
+    const Rating = document.getElementById('rating');
+
+    Title.setAttribute('value', '');
+    MinPlayer.setAttribute('value', '');
+    MaxPlayer.setAttribute('value', '');
+    Age.setAttribute('value', '');
+    PlayTime.setAttribute('value', '');
+    Played.removeAttribute('checked', '');
+    Rating.setAttribute('value', '');
 }
 
 takeFormData = () => {
+
+    modalRating1.removeAttribute('checked');
+    modalRating2.removeAttribute('checked');
+    modalRating3.removeAttribute('checked');
+    modalRating4.removeAttribute('checked');
+    modalRating5.removeAttribute('checked');
+
+    let titleCheck = document.getElementById('title')
     let Title = document.getElementById('title').value;
     let MinPlayer = document.getElementById('min-player').value;
     let MaxPlayer = document.getElementById('max-player').value;
@@ -341,13 +431,101 @@ takeFormData = () => {
     let Played = document.getElementById('played').checked;
     let Rating = document.getElementById('rating');
 
+    for (let key in myLibrary) {
+        console.log(Title, myLibrary[key]['title']);
+        if (Title == myLibrary[key]['title']) {
+            console.log(titleCheck);
+            titleCheck.setCustomValidity('Board game already in library.');
+            return;
+        }
+    }
+
+    // if (Title == )
+
     if ((Title == '') || (MinPlayer == '') || (MaxPlayer == '') || (Age == '') || (PlayTime == '')) {
         return;
     }
 
     addGameToLibrary(Title, MinPlayer, MaxPlayer, Age, PlayTime, Played, Rating);
 
+    edit = 0;
+    editSave = '';
+
     closeModal();
+}
+
+setFormData = (e) => {
+    const Title = document.getElementById('title');
+    const MinPlayer = document.getElementById('min-player');
+    const MaxPlayer = document.getElementById('max-player');
+    const Age = document.getElementById('age');
+    const PlayTime = document.getElementById('play-time');
+    const Played = document.getElementById('played');
+    const Rating = document.getElementById('rating');
+
+    Title.setAttribute('value', e.title);
+    MinPlayer.setAttribute('value', e.playerCountMin);
+    MaxPlayer.setAttribute('value', e.playerCountMax);
+    Age.setAttribute('value', e.age);
+    PlayTime.setAttribute('value', e.playTime);
+    if (e.played == true) {
+        Played.setAttribute('checked', 'checked');
+    }
+    Rating.setAttribute('value', e.rating);
+}
+
+function deleteCurrent(e) {
+    let pulledTitle = e.split(': ')[1];
+    for (let key in myLibrary) {
+        let value = myLibrary[key];
+        if (value['title'] == pulledTitle) {
+            delete myLibrary[key];
+            clearEmptyObjects();
+            displayGameOnPage();
+            return;
+        }
+    }
+}
+
+function editCurrent(e) {
+    let pulledTitle = e.split(': ')[1];
+    for (let key in myLibrary) {
+        let value = myLibrary[key];
+        if (value['title'] == pulledTitle) {
+            openModal(myLibrary[key]);       
+            delete myLibrary[key];
+            clearEmptyObjects();         
+            return;
+        }
+    }
+}
+
+function clearEmptyObjects () {
+    let temp = myLibrary.filter(element => {
+        if (Object.keys(element).length !== 0) {
+            return true;
+        }
+        return false
+    });
+    myLibrary = temp;
+}
+
+function starEdit (e) {
+    if (e == 5) {
+        modalRating1.setAttribute('checked','true');
+    }
+    else if (e == 4) {
+        modalRating2.setAttribute('checked','true');
+    }
+    else if (e == 3) {
+        modalRating3.setAttribute('checked','true');
+    }
+    else if (e == 2) {
+        modalRating4.setAttribute('checked','true');
+    }
+    else if (e == 1) {
+        modalRating5.setAttribute('checked','true');
+    }
 }
 
 addGame.onclick = openModal;
