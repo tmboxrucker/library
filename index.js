@@ -5,47 +5,73 @@ let edit = 0;
 let editSave = '';
 
 // Object constructor
-function book(title, author, pages, read) {
-    var yesOrNo;
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-    if (read == 'no') {
-        yesOrNo = 'not read yet';
-    }
-    else if (read == 'yes') {
-        yesOrNo = 'has already been read';
-    }
-    else {
-        yesOrNo = 'invalid input';
-    }
-    this.info = function() {
-        return(title + ' by ' + author + ', ' + pages + ', ' + yesOrNo)
-    }
-}
+// function book(title, author, pages, read) {
+//     var yesOrNo;
+//     this.title = title;
+//     this.author = author;
+//     this.pages = pages;
+//     this.read = read;
+//     if (read == 'no') {
+//         yesOrNo = 'not read yet';
+//     }
+//     else if (read == 'yes') {
+//         yesOrNo = 'has already been read';
+//     }
+//     else {
+//         yesOrNo = 'invalid input';
+//     }
+//     this.info = function() {
+//         return(title + ' by ' + author + ', ' + pages + ', ' + yesOrNo)
+//     }
+// }
 
-function BoardGame(gameTitle, gamePlayerCountMin, gamePlayerCountMax, gameAge, gamePlayTime, gamePlayed, gameRating) {
-    var yesOrNo;
-    this.title = gameTitle;
-    this.playerCountMin = gamePlayerCountMin;
-    this.playerCountMax = gamePlayerCountMax
-    this.age = gameAge;
-    this.playTime = gamePlayTime;
-    this.played = gamePlayed;
-    if (gamePlayed == true)  {
-        this.rating = newRating;
-    }
-    else {
-        this.rating = '';
-    }
-    if (typeof gameRating == 'string') {
-        this.rating = gameRating;
-    }
+// function BoardGame(gameTitle, gamePlayerCountMin, gamePlayerCountMax, gameAge, gamePlayTime, gamePlayed, gameRating) {
+//     var yesOrNo;
+//     this.title = gameTitle;
+//     this.playerCountMin = gamePlayerCountMin;
+//     this.playerCountMax = gamePlayerCountMax
+//     this.age = gameAge;
+//     this.playTime = gamePlayTime;
+//     this.played = gamePlayed;
+//     if (gamePlayed == true)  {
+//         this.rating = newRating;
+//     }
+//     else {
+//         this.rating = '';
+//     }
+//     if (typeof gameRating == 'string') {
+//         this.rating = gameRating;
+//     }
+//     if (this.played == 'checked') {
+//         activateRatings()
+//     }
+// }
 
-    if (this.played == 'checked') {
-        activateRatings()
-    }
+class BoardGame {
+    constructor (gameTitle, gamePlayerCountMin, gamePlayerCountMax, gameAge, gamePlayTime, gamePlayed, gameRating)
+    {
+        
+        this.title = gameTitle;
+        this.playerCountMin = gamePlayerCountMin;
+        this.playerCountMax = gamePlayerCountMax
+        this.age = gameAge;
+        this.playTime = gamePlayTime;
+        this.played = gamePlayed;
+        if (gamePlayed == true)  {
+            this.rating = newRating;
+        }
+        else {
+            this.rating = '';
+        }
+        if (typeof gameRating == 'string') {
+            this.rating = gameRating;
+        }
+    
+        if (this.played == 'checked') {
+            activateRatings()
+        }
+    }    
+    
 }
 
 const addGame = document.getElementById('addGame');
@@ -100,8 +126,9 @@ displayGameOnPage = () => {
         cardModifiers.appendChild(images1);
         cardModifiers.appendChild(images2);
         card.appendChild(cardModifiers);
-
+        let increment = 0;
         for (let key in myLibrary) {
+            increment++;
             if (key == 'title') {
                 const para = document.createElement('p');
                 para.textContent = (`Title: ${myLibrary[key]}`);
@@ -362,7 +389,6 @@ activateRatings = (e) => {
 
 openModal = (e) => {
     if (e.title == undefined) {
-        console.log('not in edit function')
         newRating = '';
         addGameModalForm.reset();
         activateRatings();
@@ -370,7 +396,6 @@ openModal = (e) => {
         overlay.classList.add('active');
     }
     else {
-        console.log('in edit function')
         edit = 1;
         editSave = e;
         newRating = editSave['rating'];
@@ -435,7 +460,6 @@ takeFormData = () => {
     let Rating = document.getElementById('rating');
 
     for (let key in myLibrary) {
-        console.log(Title, myLibrary[key]['title']);
         if (Title == myLibrary[key]['title']) {
             console.log(titleCheck);
             titleCheck.setCustomValidity('Board game already in library.');
